@@ -59,8 +59,11 @@ def call_du_sub(location: str) -> list:
         return []
 
 def create_dir_dict(raw_dat: list) -> dict:
-    "get list from du_sub, return dict {'directory': 0} where 0 is size"
-    pass
+    dir_dict ={}
+    for line in raw_dat:
+        size, path = line.split('\t')
+        dir_dict[path] = int(size)
+    return dir_dict
 
 def bytes_to_human_r(kibibytes: int, decimal_places: int=2) -> str:
     "turn 1,024 into 1 MiB, for example"
