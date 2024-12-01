@@ -26,6 +26,8 @@ def parse_command_args():
     "Set up argparse here. Call this function inside main."
     parser = argparse.ArgumentParser(description="DU Improved -- See Disk Usage Report with bar charts",epilog="Copyright 2023")
     parser.add_argument("-l", "--length", type=int, default=20, help="Specify the length of the graph. Default is 20.")
+    parser.add_argument("-H", "--human-readable", action='store_true', help="Print sizes in human readable format (e.g. 1K 23M 2G).")
+    parser.add_argument("target", nargs=1, help="The directory to scan.")
     # add argument for "human-readable". USE -H, don't use -h! -h is reserved for --help which is created automatically.
     # check the docs for an argparse option to store this as a boolean.
     # add argument for "target". set number of args to 1.
@@ -59,7 +61,7 @@ def call_du_sub(location: str) -> list:
         return []
 
 def create_dir_dict(raw_dat: list) -> dict:
-    dir_dict ={}
+    dir_dict = {}
     for line in raw_dat:
         size, path = line.split('\t')
         dir_dict[path] = int(size)
@@ -77,7 +79,22 @@ def bytes_to_human_r(kibibytes: int, decimal_places: int=2) -> str:
     str_result += suffixes[suf_count]
     return str_result
 
-if __name__ == "__main__":
+def main():
     args = parse_command_args()
-    pass
+    target_directory = args.target[0]
+# First arugment when calling the python script.
 
+# Calls the du command
+    raw_data = call_du_sub(target_directory)
+
+# Create the directory dicitionary
+    dir_dict = create_dir_dict(raw_dat)
+
+# Print Directory sizes
+    for path, size in dir_dict.items():
+        if args.human_readable:
+            size = bytes_to_human_r(size)
+        print(f"{path}: {size}")
+
+if __name__ == "__main__":
+    main()
