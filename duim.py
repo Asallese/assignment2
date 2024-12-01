@@ -8,7 +8,7 @@ import argparse
 '''
 OPS445 Assignment 2
 Program: duim.py 
-Author: "Student Name"
+Author: Asallese2 ( Anthony Sallese )
 The python code in this file (duim.py) is original work written by
 "Student Name". No code in this file is copied from any other source 
 except those provided by the course instructor, including any person, 
@@ -38,8 +38,15 @@ def percent_to_graph(percent: int, total_chars: int) -> str:
     pass
 
 def call_du_sub(location: str) -> list:
-    "use subprocess to call `du -d 1 + location`, rtrn raw list"
-    pass
+    command = ['du', '-d', '1', location]
+# the above argument is going to be ran with subprocess and has been made a method to do so. 
+    try:
+        result = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, check=True)
+        return result.stdout.strip().split('\n')
+   # "use subprocess to call `du -d 1 + location`, rtrn raw list"
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e.stderr}")
+        return []
 
 def create_dir_dict(raw_dat: list) -> dict:
     "get list from du_sub, return dict {'directory': 0} where 0 is size"
