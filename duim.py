@@ -34,8 +34,18 @@ def parse_command_args():
 
 
 def percent_to_graph(percent: int, total_chars: int) -> str:
-    "returns a string: eg. '##  ' for 50 if total_chars == 4"
-    pass
+
+# Check percent
+    if not (0 <= percent <= 100):
+        raise ValueError("Percent must be between 0 and 100.")
+# calculate the filled characters for the bar.    
+    filled_chars = round((percent / 100) * total_chars)
+
+# Bar graph symbol
+    graph = '#' * filled_chars + ' ' * (total_chars - filled_chars)
+
+# return the graph
+    return graph
 
 def call_du_sub(location: str) -> list:
     command = ['du', '-d', '1', location]
